@@ -1,0 +1,67 @@
+%YAML 1.2
+---
+# http://www.sublimetext.com/docs/3/syntax.html
+name: CSV
+file_extensions:
+  - csv
+scope: text.csv
+contexts:
+  main:
+    - include: strings
+    - match: ','
+      scope: punctuation.delimiter.comma.csv
+    - include: dates
+    - include: numbers
+    - include: advanced_csv_formulae
+
+  strings:
+    - match: '"'
+      scope: punctuation.definition.string.begin.csv
+      push:
+        - meta_scope: string.quoted.double.csv
+        - match: '""'
+          scope: constant.character.escape.csv
+        - match: '"'
+          scope: punctuation.definition.string.begin.csv
+          pop: true
+        - include: advanced_csv_formulae
+
+  dates:
+    - match: '\b(\d{4}-[0-2]\d-[0-3]\d)\b'
+      captures:
+        1: support.type.date.sortable.csv
+    - match: '\b([0-2]?\d\/[0-3]?\d\/(?:\d{2}){1,2})\b'
+      captures:
+        1: support.type.date.american.csv
+
+  numbers:
+    - match: '-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\b'
+      scope: constant.numeric.csv
+
+  advanced_csv_formulae:
+    - match: ((\[)(([+-]?\d*)(\:)?([+-]?\d*))(\,)?(([+-]?\d*)(\:)?([+-]?\d*))?(\]))\s*([<>v^])?\s*(=)
+      captures:
+        1: meta.brackets.range.advanced_csv # range
+        2: punctuation.section.brackets.begin.advanced_csv # [
+        3: meta.group.range.advanced_csv # rows
+        4: entity.range.row.begin.advanced_csv constant.numeric.advanced_csv # row_begin
+        5: punctuation.separator.colon.advanced_csv # :
+        6: entity.range.row.end.advanced_csv constant.numeric.advanced_csv # row_end
+        7: punctuation.separator.comma.advanced_csv # ,
+        8: meta.group.range.advanced_csv # columns
+        9: entity.range.column.begin.advanced_csv constant.numeric.advanced_csv # col_begin
+        10: punctuation.separator.colon.advanced_csv # :
+        11: entity.range.column.end.advanced_csv constant.numeric.advanced_csv # col_end
+        12: punctuation.section.brackets.end.advanced_csv # ]
+        13: keyword.operator.direction.advanced_csv # direction
+        14: keyword.operator.assignment.advanced_csv # equals
+      push:
+        - meta_content_scope: source.python.embedded.advanced_csv
+        - match: '(?="|$)'
+          pop: true
+        - match: ''
+          push:
+            - include: 'scope:source.python'
+          with_prototype:
+            - match: '(?="|$)'
+              pop: true
