@@ -7,9 +7,16 @@ file_extensions:
 scope: text.csv
 contexts:
   main:
-    - include: strings
+    - include: expressions
     - match: ','
       scope: punctuation.delimiter.comma.csv
+      push:
+        - match: '(?=,|$)'
+          pop: true
+        - include: expressions
+
+  expressions:
+    - include: strings
     - include: dates
     - include: numbers
     - include: advanced_csv_formulae
