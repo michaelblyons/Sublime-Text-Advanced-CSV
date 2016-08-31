@@ -36,17 +36,17 @@ contexts:
         - include: advanced_csv_formulae
 
   dates:
-    - match: '\b(\d{4}-[0-2]\d-[0-3]\d)(?:[ T]?([0-2]\d:(?:[0-5]\d){1,2})Z?)?\b{{before_comma_or_endline}}'
+    - match: '\b(\d{4}-[0-2]\d-[0-3]\d)(?:[ T]?([0-2]\d(?::[0-5]\d){1,2})Z?)?\b{{before_comma_or_endline}}'
       captures:
         1: support.type.date.sortable.csv
         2: support.type.time.sortable.csv
-    - match: '\b([0-2]?\d\/[0-3]?\d\/(?:\d{2}){1,2})(?:[ T]([0-2]?\d:(?:[0-5]?\d){1,2})Z?)?\b{{before_comma_or_endline}}'
+    - match: '\b([0-2]?\d\/[0-3]?\d\/(?:\d{2}){1,2})(?:[ T]([0-2]?\d(?::[0-5]?\d){1,2}(?: ?[AP]M)?)Z?)?\b{{before_comma_or_endline}}'
       captures:
         1: support.type.date.american.csv
         2: support.type.time.american.csv
 
   numbers:
-    - match: '(\b|-)\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\b{{before_comma_or_endline}}'
+    - match: '(\b|\B-)\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\b{{before_comma_or_endline}}'
       scope: constant.numeric.csv
 
   advanced_csv_formulae:
