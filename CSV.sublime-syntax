@@ -11,7 +11,7 @@ variables:
 contexts:
   main:
     - match: '^|,'
-      scope: punctuation.delimiter.comma.csv
+      scope: punctuation.separator.sequence.comma.csv
       push:
         - match: '{{before_comma_or_endline}}'
           pop: true
@@ -36,11 +36,11 @@ contexts:
         - include: advanced_csv_formulae
 
   dates:
-    - match: '\b(\d{4}-[0-2]\d-[0-3]\d)(?:[ T]?([0-2]\d(?::[0-5]\d){1,2})Z?)?\b{{before_comma_or_endline}}'
+    - match: '\b(\d{4}-[0-2]\d-[0-3]\d)(?:[ T]?([0-2]\d(?::[0-5]\d){1,2}(?:\.\d+)?)Z?)?\b{{before_comma_or_endline}}'
       captures:
         1: support.type.date.sortable.csv
         2: support.type.time.sortable.csv
-    - match: '\b([0-2]?\d\/[0-3]?\d\/(?:\d{2}){1,2})(?:[ T]([0-2]?\d(?::[0-5]?\d){1,2}(?: ?[AP]M)?)Z?)?\b{{before_comma_or_endline}}'
+    - match: '\b([0-2]?\d\/[0-3]?\d\/(?:\d{2}){1,2})(?:[ T]([0-2]?\d(?::[0-5]?\d){1,2}(?:\.\d+)?(?: ?[AP]M)?)Z?)?\b{{before_comma_or_endline}}'
       captures:
         1: support.type.date.american.csv
         2: support.type.time.american.csv
