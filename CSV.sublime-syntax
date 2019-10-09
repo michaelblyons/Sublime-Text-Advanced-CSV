@@ -6,7 +6,7 @@ file_extensions:
   - csv
 scope: text.csv
 variables:
-  before_comma_or_endline: '\s*(?=,|$)'
+  before_comma_or_endline: \s*(?=,|$)
 
 contexts:
   main:
@@ -30,7 +30,7 @@ contexts:
     - include: strings
     - include: dates
     - include: numbers
-    - include: advanced_csv_formulae
+    - include: advanced-csv-formulae
 
   strings:
     - match: '"'
@@ -42,24 +42,48 @@ contexts:
         - match: '"'
           scope: punctuation.definition.string.end.csv
           pop: true
-        - include: advanced_csv_formulae
+        - include: advanced-csv-formulae
 
   dates:
-    - match: '\b(\d{4}-[0-2]\d-[0-3]\d)(?:[ T]?([0-2]\d(?::[0-5]\d){1,2}(?:\.\d+)?)Z?)?\b{{before_comma_or_endline}}'
+    - match: |-
+        (?x)\b
+          (\d{4}-[0-2]\d-[0-3]\d)
+          (?:[ T]?([0-2]\d(?::[0-5]\d){1,2}(?:\.\d+)?)Z?)?
+        \b{{before_comma_or_endline}}
       captures:
         1: support.type.date.sortable.csv
         2: support.type.time.sortable.csv
-    - match: '\b([0-2]?\d\/[0-3]?\d\/(?:\d{2}){1,2})(?:[ T]([0-2]?\d(?::[0-5]?\d){1,2}(?:\.\d+)?(?: ?[AP]M)?)Z?)?\b{{before_comma_or_endline}}'
+    - match: |-
+        (?x)\b
+          ([0-2]?\d\/[0-3]?\d\/(?:\d{2}){1,2})
+          (?:[ T]
+            ([0-2]?\d
+              (?::[0-5]?\d){1,2}
+              (?:\.\d+)?
+              (?:[ ]?[AP]M)?
+            )Z?
+          )?
+        \b{{before_comma_or_endline}}
       captures:
         1: support.type.date.american.csv
         2: support.type.time.american.csv
 
   numbers:
-    - match: '(\b|\B-)\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\b{{before_comma_or_endline}}'
+    - match: (\b|\B-)\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\b{{before_comma_or_endline}}
       scope: constant.numeric.csv
 
-  advanced_csv_formulae:
-    - match: ((\[)(([+-]?\d*)(\:)?([+-]?\d*))(\,)?(([+-]?\d*)(\:)?([+-]?\d*))?(\]))\s*([<>v^])?\s*(=)
+  advanced-csv-formulae:
+    - match: |-
+        (?x)
+          (
+            (\[)
+              (([+-]?\d*)(\:)?([+-]?\d*))
+              (\,)?
+              (([+-]?\d*)(\:)?([+-]?\d*))?
+            (\])
+          )\s*
+          ([<>v^])?
+          \s*(=)
       captures:
         1: meta.brackets.range.advanced_csv # range
         2: punctuation.section.brackets.begin.advanced_csv # [
@@ -77,11 +101,11 @@ contexts:
         14: keyword.operator.assignment.advanced_csv # equals
       push:
         - meta_content_scope: source.python.embedded.advanced_csv
-        - match: '(?="|$)'
+        - match: (?="|$)
           pop: true
         - match: ''
           push:
             - include: scope:source.python
           with_prototype:
-            - match: '(?="|$)'
+            - match: (?="|$)
               pop: true
