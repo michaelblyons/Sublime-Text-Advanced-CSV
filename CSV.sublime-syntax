@@ -31,7 +31,7 @@ contexts:
         - match: '""'
           scope: constant.character.escape.csv
         - match: '"'
-          scope: punctuation.definition.string.begin.csv
+          scope: punctuation.definition.string.end.csv
           pop: true
         - include: advanced_csv_formulae
 
@@ -72,7 +72,7 @@ contexts:
           pop: true
         - match: ''
           push:
-            - include: 'scope:source.python'
+            - include: scope:source.python
           with_prototype:
             - match: '(?="|$)'
               pop: true
