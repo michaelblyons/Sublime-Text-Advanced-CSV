@@ -10,12 +10,21 @@ variables:
 
 contexts:
   main:
-    - match: '^|,'
-      scope: punctuation.separator.sequence.comma.csv
+    - match: ^
       push:
-        - match: '{{before_comma_or_endline}}'
+        - meta_content_scope: meta.row.csv
+        - match: $
           pop: true
-        - include: expressions
+        - match: \,
+          scope: punctuation.separator.sequence.comma.csv
+        - match: (?!,)
+          push: cell
+
+  cell:
+    - meta_content_scope: meta.cell.csv
+    - match: (?=,|$)
+      pop: true
+    - include: expressions
 
   expressions:
     - include: strings
